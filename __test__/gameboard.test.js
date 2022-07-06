@@ -23,7 +23,17 @@ describe('GameBoard test', () => {
         expect(game.placeShip(1,1,2,true)).toBe('Error, place already taken')
     });
 
-    test.only('Check for game board borden', () => {
+    test('Check for game board borden', () => {
         expect(game.placeShip(9,9,4,false)).toBe('Error, game board border collision')
     });
+
+    test('Check if the receiveAttack method return coordinates', () => {
+        expect(game.receiveAttack(4,3)).toStrictEqual([4,3]);
+    });
+    test('Check if the receiveAttack method change the board.isShot = true', () => {
+        expect(game.board[4][3].isShot).toBeTruthy();
+    });
+    test('receiveAttack method should return a error if the hitting position as already been shoot', () => {
+        expect(game.receiveAttack(4,3)).toBe('Error, position already shot')
+    })
 });
