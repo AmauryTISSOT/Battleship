@@ -1,1 +1,106 @@
-(()=>{"use strict";(new class extends class{constructor(){this.board=[],this.board.length||this.init()}init(){for(let t=0;t<10;t++){this.board.push([]);for(let r=0;r<10;r++)this.board[t].push({hasShip:!1,isShot:!1})}}placeShip(t,r,i,e){if(this.board[t][r].hasShip)return"Error, place already taken";if(t<this.board.length-(i-1)||r<this.board[0].length-(i-1)){if(!e)for(let e=0;e<i;e++)this.board[t][r].hasShip=!0,r++;if(e)for(let e=0;e<i;e++)this.board[t][r].hasShip=!0,t++;const o=[];for(let t=0;t<this.board.length;t++)for(let r=0;r<this.board[t].length;r++)this.board[t][r].hasShip&&o.push([t,r]);return o}return"Error, game board border collision"}receiveAttack(t,r){return this.board[t][r].isShot?"Error, position already shot":(this.board[t][r].isShot=!0,[t,r])}}{constructor(){super()}displayGrid(){const t=document.querySelector(".content");for(let r=0;r<this.board.length;r++)for(let i=0;i<this.board[r].length;i++){let e=document.createElement("div");e.className="grid",e.id=`${r},${i}`,t.appendChild(e),e.textContent=e.id}}_displayShip(){for(let t=0;t<this.board.length;t++)for(let r=0;r<this.board[t].length;r++)if(!0===this.board[t][r].hasShip)return"S"}}).displayGrid()})();
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/domdisplay.js":
+/*!***************************!*\
+  !*** ./src/domdisplay.js ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameboard */ \"./src/gameboard.js\");\n\n\nclass DomDisplay extends _gameboard__WEBPACK_IMPORTED_MODULE_0__[\"default\"] {\n\n    constructor() {\n        super();\n        this.board = this.board;\n    }\n\n    displayGrid (){\n        this._deleteContentElement();\n        const contentE = document.querySelector('.content');\n        for (let i = 0; i < this.board.length; i++) {\n            for (let j = 0; j < this.board[i].length; j++) {\n                let divE = document.createElement('div');\n                divE.className = 'grid'\n                divE.id = `${i},${j}`\n                contentE.appendChild(divE);\n                divE.textContent = divE.id\n                if (this.board[i][j].hasShip) {\n                    divE.className = 'ship';\n                }\n                if (this.board[i][j].isShot) {\n                    divE.className = 'shot';\n                }\n                if (this.board[i][j].hasShip && this.board[i][j].isShot) {\n                    divE.className = 'hit'\n                }\n            }\n        }\n    };\n    \n    displayShip () {\n        window.addEventListener('click', (event) => {\n            const targetEId = event.target.id.split(',');\n            let x = parseInt(targetEId[0]);\n            let y = parseInt(targetEId[1])\n            this.placeShip(x, y, 4, false);\n            this.displayGrid();\n        })  \n    }\n\n    displayShot () {\n        window.addEventListener('click', (event) => {\n            const targetEId = event.target.id.split(',');\n            let x = parseInt(targetEId[0]);\n            let y = parseInt(targetEId[1])\n            console.log('shot at', x, y)\n            this.receiveAttack(x, y);\n            console.log(this.board[x][y].isShot)\n            this.displayGrid(); \n        })\n    }\n\n    _deleteContentElement () {\n        const e = document.querySelector(\".content\");\n        let first = e.firstElementChild;\n        while (first) {\n            first.remove();\n            first = e.firstElementChild;\n        };\n    };\n    \n    \n}\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DomDisplay);\n\n//# sourceURL=webpack:///./src/domdisplay.js?");
+
+/***/ }),
+
+/***/ "./src/gameboard.js":
+/*!**************************!*\
+  !*** ./src/gameboard.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n\nclass GameBoard {\n\tconstructor() {\n\t\tthis.board = [];\n\t\tif (!this.board.length) this.init();\n\t}\n    // method to initialize a 10 by 10 2D array;\n\tinit() {\n\t\tfor (let i = 0; i < 10; i++) {\n            this.board.push([])\n            for (let j = 0; j < 10; j++) {\n                this.board[i].push({ hasShip: false, isShot: false })\n            }\n\t\t}\n\t}\n\n    placeShip (x, y, shipLength, rotation) {\n\n        if (!this.board[x][y].hasShip){\n            // console.log('x', x)\n            // console.log('y', y)\n           \n            \n            if (!rotation) {\n                if(y <= (this.board.length - shipLength)){   \n                    if (!this.setCollision(x,y,shipLength,rotation)) {\n\n                    for (let i = 0; i < shipLength; i++) {\n                        this.board[x][y].hasShip = true;\n                        y++;   \n                    }\n                }\n   \n                }\n                else {\n                    console.log('Error, game board border collision')\n                    return \"Error board collision\"\n                }\n            };\n\n\n            if(rotation){\n                if(x <= (this.board.length - shipLength)){  \n                    if (!this.setCollision(x,y,shipLength,rotation)){       \n                        for (let i = 0; i < shipLength; i++) {\n                            this.board[x][y].hasShip = true;\n                            x++;\n                        } \n                    }\n                }\n                else {\n                    console.log('Error, game board border collision')\n                    return \"Error board collision\"\n                }\n            };\n\n                const shipCoordinate = [];\n                for (let i = 0; i < this.board.length; i++) {\n                    for (let j = 0; j < this.board[i].length; j++) {\n                        if(this.board[i][j].hasShip) {\n                            shipCoordinate.push([i,j]);\n                        } \n                    };\n                };\n            return shipCoordinate\n        }\n        else{\n            console.log('Error, place already taken')\n            return 'Error, place already taken'\n        }\n        \n    }\n\n    // x = 5 : collision true pour (5,1)(5,2)(5,3) donc x - (length-1)\n\n    setCollision(x,y,shipLength, rotation) {\n        let collisionArray = [];\n        if (rotation) {\n            for (let i = x; i < x + shipLength; i++) {\n                collisionArray.push(this.board[i][y].hasShip)\n            }\n            if (collisionArray.includes(true)){\n                console.log('ship collision');\n                return true\n            }\n            else return false\n        }\n\n        if (!rotation) {\n            for (let i = y; i < y + shipLength; i++) {\n                collisionArray.push(this.board[x][i].hasShip)\n            }\n            if (collisionArray.includes(true)){\n                console.log('ship collision');\n                return true\n            }\n            else return false\n        }\n        console.log(collisionArray);\n    }\n\n\n    receiveAttack(x,y) {\n        if (!this.board[x][y].isShot) {\n            this.board[x][y].isShot = true;\n            return [x,y]\n            \n        }\n        if(this.board[x][y].isShot) {\n            console.log('Error, position already shot')\n            return 'Error, position already shot'\n        }\n    }\n\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GameBoard);\n\n\n//# sourceURL=webpack:///./src/gameboard.js?");
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _domdisplay__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./domdisplay */ \"./src/domdisplay.js\");\n/* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./gameboard */ \"./src/gameboard.js\");\n\n\n\n\nconst dom = new _domdisplay__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\ndom.displayShot();\n//dom.displayShip();\ndom.placeShip(5,5,4,true);\ndom.displayGrid();\nconsole.log('dom', dom.board);\n\n\n\n//# sourceURL=webpack:///./src/index.js?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	
+/******/ })()
+;

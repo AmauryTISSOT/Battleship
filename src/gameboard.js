@@ -17,22 +17,42 @@ class GameBoard {
     placeShip (x, y, shipLength, rotation) {
 
         if (!this.board[x][y].hasShip){
+            // console.log('x', x)
+            // console.log('y', y)
+           
+            
+            if (!rotation) {
+                if(y <= (this.board.length - shipLength)){   
+                    if (!this.setCollision(x,y,shipLength,rotation)) {
 
-            if(x < (this.board.length - (shipLength-1)) || y < (this.board[0].length - (shipLength-1))){         
-
-                if (!rotation) {
                     for (let i = 0; i < shipLength; i++) {
                         this.board[x][y].hasShip = true;
-                        y++;
-                        
-                    };
-                };
-                if(rotation){
-                    for (let i = 0; i < shipLength; i++) {
-                        this.board[x][y].hasShip = true;
-                        x++;
-                    };   
-                };
+                        y++;   
+                    }
+                }
+   
+                }
+                else {
+                    console.log('Error, game board border collision')
+                    return "Error board collision"
+                }
+            };
+
+
+            if(rotation){
+                if(x <= (this.board.length - shipLength)){  
+                    if (!this.setCollision(x,y,shipLength,rotation)){       
+                        for (let i = 0; i < shipLength; i++) {
+                            this.board[x][y].hasShip = true;
+                            x++;
+                        } 
+                    }
+                }
+                else {
+                    console.log('Error, game board border collision')
+                    return "Error board collision"
+                }
+            };
 
                 const shipCoordinate = [];
                 for (let i = 0; i < this.board.length; i++) {
@@ -43,23 +63,51 @@ class GameBoard {
                     };
                 };
             return shipCoordinate
-            }
-            else {
-                return 'Error, game board border collision'
-            }
         }
         else{
+            console.log('Error, place already taken')
             return 'Error, place already taken'
         }
         
     }
+
+    // x = 5 : collision true pour (5,1)(5,2)(5,3) donc x - (length-1)
+
+    setCollision(x,y,shipLength, rotation) {
+        let collisionArray = [];
+        if (rotation) {
+            for (let i = x; i < x + shipLength; i++) {
+                collisionArray.push(this.board[i][y].hasShip)
+            }
+            if (collisionArray.includes(true)){
+                console.log('ship collision');
+                return true
+            }
+            else return false
+        }
+
+        if (!rotation) {
+            for (let i = y; i < y + shipLength; i++) {
+                collisionArray.push(this.board[x][i].hasShip)
+            }
+            if (collisionArray.includes(true)){
+                console.log('ship collision');
+                return true
+            }
+            else return false
+        }
+        console.log(collisionArray);
+    }
+
 
     receiveAttack(x,y) {
         if (!this.board[x][y].isShot) {
             this.board[x][y].isShot = true;
             return [x,y]
             
-        } else {
+        }
+        if(this.board[x][y].isShot) {
+            console.log('Error, position already shot')
             return 'Error, position already shot'
         }
     }

@@ -1,10 +1,10 @@
-const GameBoard = require('../gameboard');
-
+import GameBoard from "../src/gameboard";
 
 describe('GameBoard test', () => {
     let game;
     beforeAll(() => {
         game = new GameBoard;
+        //game.placeShip(5,5,4,false)
     });
 
     test('Check if the game board grid is 10 by 10', () => {
@@ -24,7 +24,7 @@ describe('GameBoard test', () => {
     });
 
     test('Check for game board borden', () => {
-        expect(game.placeShip(9,9,4,false)).toBe('Error, game board border collision')
+        expect(game.placeShip(9,9,4,false)).toBe('Error board collision')
     });
 
     test('Check if the receiveAttack method return coordinates', () => {
@@ -35,5 +35,8 @@ describe('GameBoard test', () => {
     });
     test('receiveAttack method should return a error if the hitting position as already been shoot', () => {
         expect(game.receiveAttack(4,3)).toBe('Error, position already shot')
+    });
+    test.skip('Ship collision', () => {
+        expect(game.setCollision(5,2,4,false)).toBe(true)
     })
 });
