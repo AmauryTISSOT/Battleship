@@ -1,9 +1,9 @@
 class Ship {
 
-    constructor(name, length) {
-        this.name = name,
+    constructor(length) {
         this.length = this._lengthCreator(length),
-        this.sunk = false
+        this.sunk = false,
+        this.shipLocation = [];
     }
 
     _lengthCreator (length) {
@@ -12,11 +12,6 @@ class Ship {
             shipLength.push(1);
         }
         return shipLength
-    }
-
-    hit (damageLocation) {
-        this.length.splice(damageLocation,1,0)
-        return this.length
     }
 
     isSunk () {

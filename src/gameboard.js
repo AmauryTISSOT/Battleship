@@ -1,6 +1,8 @@
+import Ship from "./ship";
 
-class GameBoard {
+class GameBoard extends Ship{
 	constructor() {
+        super();
 		this.board = [];
 		if (!this.board.length) this.init();
 	}
@@ -16,6 +18,8 @@ class GameBoard {
 
     placeShip (x, y, shipLength, rotation) {
 
+        const newShip = new Ship(shipLength);
+
         if (!this.board[x][y].hasShip){
             // console.log('x', x)
             // console.log('y', y)
@@ -27,14 +31,16 @@ class GameBoard {
 
                     for (let i = 0; i < shipLength; i++) {
                         this.board[x][y].hasShip = true;
+                        newShip.shipLocation.push([x,y])
                         y++;   
                     }
+                    return true
                 }
    
                 }
                 else {
                     console.log('Error, game board border collision')
-                    return "Error board collision"
+                    return false
                 }
             };
 
@@ -44,31 +50,33 @@ class GameBoard {
                     if (!this.setCollision(x,y,shipLength,rotation)){       
                         for (let i = 0; i < shipLength; i++) {
                             this.board[x][y].hasShip = true;
+                            newShip.shipLocation.push([x,y])
                             x++;
                         } 
+                        return true
                     }
                 }
                 else {
                     console.log('Error, game board border collision')
-                    return "Error board collision"
+                    return false
                 }
             };
 
-                const shipCoordinate = [];
-                for (let i = 0; i < this.board.length; i++) {
-                    for (let j = 0; j < this.board[i].length; j++) {
-                        if(this.board[i][j].hasShip) {
-                            shipCoordinate.push([i,j]);
-                        } 
-                    };
-                };
-            return shipCoordinate
+            //     const shipCoordinate = [];
+            //     for (let i = 0; i < this.board.length; i++) {
+            //         for (let j = 0; j < this.board[i].length; j++) {
+            //             if(this.board[i][j].hasShip) {
+            //                 shipCoordinate.push([i,j]);
+            //             } 
+            //         };
+            //     };
+            // console.log(newShip.shipLocation)
+            // return shipCoordinate
         }
         else{
             console.log('Error, place already taken')
-            return 'Error, place already taken'
+            return false
         }
-        
     }
 
     // x = 5 : collision true pour (5,1)(5,2)(5,3) donc x - (length-1)
