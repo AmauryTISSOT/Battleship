@@ -6,9 +6,13 @@ import iaAlgo from "./iaAlgo";
 const dom = new DomDisplay();
 const ia = new iaAlgo();
 ia.randomShip();
-//dom.displayShot();
-//dom.displayShip();
-//dom.placeShip(5,5,4,true);
-//dom.displayGrid();
-//console.log('dom', dom.board);
+ia.randomAttack();
+
+// ia.placeShip(5,5,4,false);
+// ia.receiveAttack(5,5)
+// ia._shottingPattern(5,5)
+ia.displayShot();
+ia.displayShip();
+ia.displayGrid();
+console.log('dom', ia.board);
 

@@ -109,15 +109,22 @@ class GameBoard extends Ship{
 
 
     receiveAttack(x,y) {
-        if (!this.board[x][y].isShot) {
-            this.board[x][y].isShot = true;
-            return [x,y]
-            
+        try{
+            if (!this.board[x][y].isShot) {
+                this.board[x][y].isShot = true;
+                return true
+            }
+    
+            if(this.board[x][y].isShot) {
+                console.log('Error, position already shot')
+                return false
+            }
         }
-        if(this.board[x][y].isShot) {
-            console.log('Error, position already shot')
-            return 'Error, position already shot'
+
+        catch (error){
+            console.log('AA')
         }
+        
     }
 
 }
